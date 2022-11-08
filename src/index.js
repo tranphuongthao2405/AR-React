@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+// 11/2022: MindAR is unable to run with react v18
 ReactDOM.render(
   <React.StrictMode>
     <App />

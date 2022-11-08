@@ -1,0 +1,11 @@
+Model Information:
+* title:	Teacher profile type 1
+* source:	https://sketchfab.com/3d-models/teacher-profile-type-1-686746d2e4f44de5805b55d60f727f2c
+* author:	grig.perev (https://sketchfab.com/grig.perev)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Teacher profile type 1" (https://sketchfab.com/3d-models/teacher-profile-type-1-686746d2e4f44de5805b55d60f727f2c) by grig.perev (https://sketchfab.com/grig.perev) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

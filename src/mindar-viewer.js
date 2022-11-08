@@ -1,22 +1,11 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useRef, useState } from "react";
+import { useArManager } from "./hooks";
 
 const MindARViewer = () => {
   const sceneRef = useRef(null);
-  const arSystemRef = useRef(null);
+  const { startAR, stopAR } = useArManager(sceneRef);
 
-  const [enabled, setEnabled] = useState(false);
-
-  const startAR = useCallback(() => {
-    if (!arSystemRef.current) return;
-
-    arSystemRef.current.start();
-  }, []);
-
-  const stopAR = useCallback(() => {
-    if (!arSystemRef.current) return;
-
-    arSystemRef.current.stop();
-  }, []);
+  const [enabled, setEnabled] = useState(true);
 
   const handleArAction = () => {
     if (enabled) {
@@ -28,61 +17,158 @@ const MindARViewer = () => {
     setEnabled(!enabled);
   };
 
-  useEffect(() => {
-    const sceneEl = sceneRef.current;
-    arSystemRef.current = sceneEl.systems["mindar-image-system"];
-
-    return () => {
-      stopAR();
-    };
-  }, [stopAR]);
-
   return (
-    <>
-      <button onClick={handleArAction}>{enabled ? "Stop" : "Start"}</button>
-      <div className="container">
-        <a-scene
-          ref={sceneRef}
-          mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.0.0/examples/image-tracking/assets/card-example/card.mind; autoStart: false; uiLoading: no; uiError: no; uiScanning: no;"
-          color-space="sRGB"
-          embedded
-          renderer="colorManagement: true, physicallyCorrectLights"
-          vr-mode-ui="enabled: false"
-          device-orientation-permission-ui="enabled: false"
-        >
-          <a-assets>
-            <img
-              id="card"
-              src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.0.0/examples/image-tracking/assets/card-example/card.png"
-              alt=""
-            />
-            <a-asset-item
-              id="avatarModel"
-              src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.0.0/examples/image-tracking/assets/card-example/softmind/scene.gltf"
-            ></a-asset-item>
-          </a-assets>
+    <div className="container">
+      <button className="start-button" onClick={handleArAction}>
+        {enabled ? "Stop" : "Start"}
+      </button>
+      <a-scene
+        ref={sceneRef}
+        mindar-image="imageTargetSrc: ./compiler/data.mind;"
+        color-space="sRGB"
+        renderer="colorManagement: true, physicallyCorrectLights"
+        vr-mode-ui="enabled: false"
+        device-orientation-permission-ui="enabled: false"
+        gesture-detector
+      >
+        <a-assets timeout="30000">
+          <img id="facebook-logo" src="./image/facebook-logo.webp" alt="" />
+          <img id="instagram-logo" src="./image/instagram-logo.webp" alt="" />
+          <img id="linkedin-logo" src="./image/linkedin-logo.png" alt="" />
+          <img id="eddie-bird" src="./model/eddie-bird.png" alt="" />
+          <a-asset-item id="mooncat" src="./model/mooncat.gltf"></a-asset-item>
+          <a-asset-item
+            id="phoenix"
+            src="./model/phoenix/scene.gltf"
+          ></a-asset-item>
+          <a-asset-item id="torus" src="./model/torus.glb"></a-asset-item>
+          <a-asset-item id="trex" src="./model/trex/scene.gltf"></a-asset-item>
+          <a-asset-item
+            id="flying-hummingbird"
+            src="./model/flying-hummingbird.glb"
+          ></a-asset-item>
+          <a-asset-item
+            id="business-card"
+            src="./model/business-card/scene.gltf"
+          />
+        </a-assets>
 
-          <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+        <a-camera
+          position="0 0 0"
+          look-controls="enabled: false"
+          cursor="fuse: false; rayOrigin: mouse;"
+          raycaster="far: 10000; objects: .clickable"
+        ></a-camera>
 
-          <a-entity mindar-image-target="targetIndex: 0" visible={enabled}>
-            <a-plane
-              src="#card"
-              position="0 0 0"
-              height="0.552"
-              width="1"
-              rotation="0 0 0"
-            ></a-plane>
+        <a-entity visible={enabled}>
+          <a-entity mindar-image-target="targetIndex: 0">
             <a-gltf-model
-              rotation="0 0 0 "
-              position="0 0 0.1"
-              scale="0.005 0.005 0.005"
-              src="#avatarModel"
-              animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
+              position="0 0 0"
+              rotation="0 0 0"
+              src="#torus"
+              animation-handler
+              object-detection
+              action-handler
+              gesture-handler="locationBased: true; minScale: 0.0005; maxScale: 5;"
             ></a-gltf-model>
           </a-entity>
-        </a-scene>
-      </div>
-    </>
+          <a-entity mindar-image-target="targetIndex: 1">
+            <a-plane
+              position="0 0 0"
+              rotation="0 0 0"
+              src="#eddie-bird"
+              width="0.75"
+              height="0.75"
+              object-detection
+              action-handler
+              gesture-handler="locationBased: true; minScale: 0.0001; maxScale: 5;"
+            ></a-plane>
+          </a-entity>
+          <a-entity mindar-image-target="targetIndex: 2">
+            <a-gltf-model
+              position="0 0 0"
+              rotation="0 0 0"
+              src="#phoenix"
+              animation-handler
+              object-detection
+              action-handler
+              gesture-handler="locationBased: true; minScale: 0.0005; maxScale: 5;"
+            ></a-gltf-model>
+          </a-entity>
+          <a-entity mindar-image-target="targetIndex: 3">
+            <a-gltf-model
+              position="0 0 0"
+              rotation="0 0 0"
+              src="#trex"
+              animation-handler
+              object-detection
+              action-handler
+              gesture-handler="locationBased: true; minScale: 0.0005; maxScale: 5;"
+            ></a-gltf-model>
+          </a-entity>
+          <a-entity mindar-image-target="targetIndex: 4">
+            <a-gltf-model
+              position="0 0 0"
+              rotation="0 0 0"
+              src="#flying-hummingbird"
+              animation-handler
+              object-detection
+              action-handler
+              gesture-handler="locationBased: true; minScale: 0.0005; maxScale: 5;"
+            ></a-gltf-model>
+          </a-entity>
+          <a-entity mindar-image-target="targetIndex: 5">
+            <a-gltf-model
+              position="0 0 0"
+              rotation="180 0 180"
+              src="#mooncat"
+              animation-handler
+              object-detection
+              action-handler
+              gesture-handler="locationBased: true; minScale: 0.0005; maxScale: 5;"
+            ></a-gltf-model>
+          </a-entity>
+          <a-entity mindar-image-target="targetIndex: 6">
+            <a-plane
+              id="facebook"
+              class="clickable"
+              src="#facebook-logo"
+              position="-0.4 -0.75 0"
+              rotation="0 0 0"
+              width="0.25"
+              height="0.25"
+            ></a-plane>
+            <a-plane
+              id="instagram"
+              class="clickable"
+              src="#instagram-logo"
+              position="0 -0.75 0"
+              rotation="0 0 0"
+              width="0.25"
+              height="0.25"
+            ></a-plane>
+            <a-plane
+              id="linkedin"
+              class="clickable"
+              src="#linkedin-logo"
+              position="0.4 -0.75 0"
+              rotation="0 0 0"
+              width="0.25"
+              height="0.25"
+            ></a-plane>
+            <a-gltf-model
+              position="0 -0.5 0"
+              rotation="0 0 0"
+              src="#business-card"
+              animation-handler
+              object-detection
+              action-handler
+              gesture-handler="locationBased: true; minScale: 0.0005; maxScale: 5;"
+            ></a-gltf-model>
+          </a-entity>
+        </a-entity>
+      </a-scene>
+    </div>
   );
 };
 

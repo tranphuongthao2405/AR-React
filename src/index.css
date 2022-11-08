@@ -12,14 +12,35 @@ code {
     monospace;
 }
 
-.App {
-  text-align: center;
-}
-
 .container {
   position: absolute;
   height: 100%;
   width: 100%;
   overflow: hidden;
-  margin-top: 20px;
+}
+
+.arjs-loader {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.arjs-loader div {
+  text-align: center;
+  font-size: 1.25em;
+  color: white;
+}
+
+.start-button {
+  position: absolute; 
+  top: 10px; 
+  left: 10px; 
+  z-index: 999;
 }
