@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useArManager } from "./hooks";
 
 const MindARViewer = () => {
@@ -16,6 +16,31 @@ const MindARViewer = () => {
 
     setEnabled(!enabled);
   };
+
+  const handleRedirect = (element, link) => {
+    if (!element) return;
+    element.addEventListener("click", () => {
+      console.log(element);
+      window.location.href = link;
+    });
+  };
+
+  const handleLogoClick = () => {
+    const facebookLogo = document.getElementById("facebook");
+    const instagramLogo = document.getElementById("instagram");
+    const linkedinLogo = document.getElementById("linkedin");
+
+    handleRedirect(facebookLogo, "https://www.facebook.com/mywebar/");
+    handleRedirect(instagramLogo, "https://www.instagram.com/mywebar/");
+    handleRedirect(
+      linkedinLogo,
+      "https://www.linkedin.com/company/devar-official/"
+    );
+  };
+
+  useEffect(() => {
+    handleLogoClick();
+  }, []);
 
   return (
     <div className="container">
@@ -161,9 +186,6 @@ const MindARViewer = () => {
               rotation="0 0 0"
               src="#business-card"
               animation-handler
-              object-detection
-              action-handler
-              gesture-handler="locationBased: true; minScale: 0.0005; maxScale: 5;"
             ></a-gltf-model>
           </a-entity>
         </a-entity>
