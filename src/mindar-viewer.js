@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useArManager } from "./hooks";
 
 const MindARViewer = () => {
   const sceneRef = useRef(null);
-  const { startAR, stopAR } = useArManager(sceneRef);
+  const { startAR, stopAR, arSystem } = useArManager(sceneRef);
 
   const [enabled, setEnabled] = useState(true);
 
   const handleArAction = () => {
+    if (!arSystem) return;
     if (enabled) {
       stopAR();
     } else {
@@ -25,7 +26,7 @@ const MindARViewer = () => {
     });
   };
 
-  const handleLogoClick = () => {
+  const handleLogoClick = useCallback(() => {
     const facebookLogo = document.getElementById("facebook");
     const instagramLogo = document.getElementById("instagram");
     const linkedinLogo = document.getElementById("linkedin");
@@ -36,11 +37,11 @@ const MindARViewer = () => {
       linkedinLogo,
       "https://www.linkedin.com/company/devar-official/"
     );
-  };
+  }, []);
 
   useEffect(() => {
     handleLogoClick();
-  }, []);
+  }, [handleLogoClick]);
 
   return (
     <div className="container">
